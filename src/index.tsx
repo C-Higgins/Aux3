@@ -3,7 +3,7 @@ import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import App from './App'
 import './index.css'
-import registerServiceWorker from './registerServiceWorker'
+// import registerServiceWorker from './registerServiceWorker'
 
 const firebaseConfig = {
     apiKey: 'AIzaSyDSm09hcjpWpoWXEDwinj7-tXH6cmt1iCw',
@@ -18,4 +18,4 @@ ReactDOM.render(
     <App />,
     document.getElementById('root') as HTMLElement
 )
-registerServiceWorker()
+// registerServiceWorker()

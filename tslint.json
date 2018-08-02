@@ -10,6 +10,17 @@
     "object-literal-sort-keys": false,
     "no-console": {
       "severity": "warning"
-    }
+    },
+    "member-access": {
+      "severity": "warning",
+      "options": "no-public"
+    },
+    "member-ordering": {
+      "severity": "warning",
+      "options": {
+        "order": "statics-first"
+      }
+    },
+    "interface-name": false
   }
 }

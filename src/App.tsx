@@ -5,10 +5,11 @@ import {connect} from 'react-redux'
 import {actions} from './redux/authorization'
 import * as Types from './redux/types'
 import {bindActionCreators} from 'redux'
+import {RouteComponentProps} from 'react-router'
 
-type Actions = typeof actions
+type Props = typeof actions & Types.AuthorizationState & RouteComponentProps<any>
 
-class App extends React.Component<Types.AuthorizationState & Actions> {
+class App extends React.Component<Props> {
 
 	componentWillMount() {
 		this.props.signInAnonymously()

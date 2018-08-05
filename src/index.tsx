@@ -7,6 +7,7 @@ import App from './App'
 import './index.css'
 import {Provider} from 'react-redux'
 import configureStore from './redux'
+import {BrowserRouter as Router, Route} from 'react-router-dom'
 
 firebase.initializeApp({
 	apiKey: 'AIzaSyDSm09hcjpWpoWXEDwinj7-tXH6cmt1iCw',
@@ -19,7 +20,9 @@ firebase.initializeApp({
 
 ReactDOM.render(
 	<Provider store={configureStore()}>
-		<App />
+		<Router>
+			<Route exact path='/test' component={App} />
+		</Router>
 	</Provider>,
 	document.getElementById('root') as HTMLElement,
 )

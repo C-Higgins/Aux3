@@ -22,6 +22,10 @@
       }
     },
     "ordered-imports": false,
-    "interface-name": false
+    "interface-name": false,
+    "jsx-boolean-value": {
+      "severity": "warning",
+      "options": "never"
+    }
   }
 }

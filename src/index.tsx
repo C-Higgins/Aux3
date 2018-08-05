@@ -5,6 +5,8 @@ import * as ReactDOM from 'react-dom'
 import App from './App'
 // import registerServiceWorker from './registerServiceWorker'
 import './index.css'
+import {Provider} from 'react-redux'
+import configureStore from './redux'
 
 firebase.initializeApp({
 	apiKey: 'AIzaSyDSm09hcjpWpoWXEDwinj7-tXH6cmt1iCw',
@@ -16,7 +18,9 @@ firebase.initializeApp({
 })
 
 ReactDOM.render(
-	<App />,
+	<Provider store={configureStore()}>
+		<App />
+	</Provider>,
 	document.getElementById('root') as HTMLElement,
 )
 

@@ -21,6 +21,7 @@
         "order": "statics-first"
       }
     },
+    "ordered-imports": false,
     "interface-name": false
   }
 }

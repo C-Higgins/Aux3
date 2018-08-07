@@ -21,7 +21,7 @@ firebase.initializeApp({
 ReactDOM.render(
 	<Provider store={configureStore()}>
 		<Router>
-			<Route exact path='/test' component={App} />
+			<Route exact path='/' component={App} />
 		</Router>
 	</Provider>,
 	document.getElementById('root') as HTMLElement,

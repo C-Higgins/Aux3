@@ -1,0 +1,35 @@
+*Rooms (lobby)
+	ROOMID
+		current_track {}
+		userCount
+		name
+*RoomData (inside room)
+	ROOMID
+		current_track {}
+		userCount
+		name
+		hostID
+		*Users
+			USERID
+				...Users.USERID.public
+		*Songs
+			SONGID
+				metadata {}
+				isUploading
+*Users
+	USERID
+		settings
+		email
+		public {
+			displayName
+		}
+
+
+Non server actions:
+	Creating a room
+	Change your user document
+	Joining a room
+All other actions are done by the server in some way
+
+Rooms is only updated from server, as reaction to change in RoomData
+RoomData can only be read if RoomData/{room}/Users contains your USERID

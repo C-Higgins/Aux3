@@ -1,20 +1,27 @@
-import {types as authTypes} from './authorization'
 import {ThunkAction, ThunkDispatch as TD} from 'redux-thunk'
 import {Action} from 'redux'
 import {User as FBUser} from 'firebase'
 
 export interface State {
-	readonly authorization: authTypes.AuthorizationState
-	readonly lobby: LobbyState
-	readonly room: RoomState
-	readonly user: UserState
+	readonly authorization: AuthorizationState
+	// readonly lobby: LobbyState
+	// readonly room: RoomState
+	// readonly user: UserState
+}
+
+export interface AuthorizationState {
+	readonly isLoggedIn: boolean
+	readonly user: null | {
+		displayName: string | null
+		email: string | null
+		emailVerified: boolean
+		isAnonymous: boolean
+	}
 }
 
 export type Thunk = (payload?: any) => ThunkAction<Promise<Action>, State, void, Action>
 
 export type ThunkDispatch = TD<State, void, Action>
-
-export * from './authorization/types'
 
 interface LobbyState {
 	readonly rooms: LobbyRoom[]

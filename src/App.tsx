@@ -2,17 +2,24 @@ import * as React from 'react'
 import './App.css'
 import Home from './components/Home'
 import {connect} from 'react-redux'
-import {actions} from './redux/authorization'
+import {signInAnonymously, updateName} from './redux/authorization'
 import * as Types from './redux/types'
 import {bindActionCreators} from 'redux'
 import {RouteComponentProps} from 'react-router'
 
+
+const actions = {
+	signInAnonymously,
+	updateName,
+}
 type Props = typeof actions & Types.AuthorizationState & RouteComponentProps<any>
 
 class App extends React.Component<Props> {
 
-	componentWillMount() {
-		this.props.signInAnonymously()
+	async componentWillMount() {
+		await this.props.signInAnonymously()
+
+		// TODO: put the listeners in here and have them call actions
 	}
 
 	render() {

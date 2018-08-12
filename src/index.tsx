@@ -4,7 +4,6 @@ import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import App from './App'
 // import registerServiceWorker from './registerServiceWorker'
-import './index.css'
 import {Provider} from 'react-redux'
 import configureStore from './redux'
 import {BrowserRouter as Router, Route} from 'react-router-dom'
@@ -18,8 +17,10 @@ firebase.initializeApp({
 	messagingSenderId: '63957372247',
 })
 
+const store = configureStore()
+
 ReactDOM.render(
-	<Provider store={configureStore()}>
+	<Provider store={store}>
 		<Router>
 			<Route exact path='/' component={App} />
 		</Router>

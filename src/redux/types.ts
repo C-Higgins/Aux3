@@ -4,7 +4,7 @@ import {User as FBUser} from 'firebase'
 
 export interface State {
 	readonly authorization: AuthorizationState
-	// readonly lobby: LobbyState
+	readonly lobby: LobbyState
 	// readonly room: RoomState
 	// readonly user: UserState
 }
@@ -19,11 +19,11 @@ export interface AuthorizationState {
 	}
 }
 
-export type Thunk = (payload?: any) => ThunkAction<Promise<Action>, State, void, Action>
+export type Thunk = (payload?: any, ...args: any[]) => ThunkAction<Promise<Action>, State, void, Action>
 
 export type ThunkDispatch = TD<State, void, Action>
 
-interface LobbyState {
+export interface LobbyState {
 	readonly rooms: LobbyRoom[]
 }
 
@@ -31,7 +31,7 @@ interface UserState extends FBUser {
 	readonly settings: { readonly [key: string]: any }
 }
 
-interface LobbyRoom {
+export interface LobbyRoom {
 	readonly userCount: number
 	readonly name: string
 	readonly currentTrack: Track

@@ -16,6 +16,7 @@ firebase.initializeApp({
 	storageBucket: 'aux-radio.appspot.com',
 	messagingSenderId: '63957372247',
 })
+firebase.firestore().settings({timestampsInSnapshots: true})
 
 const store = configureStore()
 

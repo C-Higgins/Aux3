@@ -1,9 +1,11 @@
 import * as React from 'react'
 import logo from '../logo.svg'
+import {LobbyRoom} from '../redux/types'
 
 interface HomeProps {
 	name: string | null
 	updateName: (newName: string) => any
+	rooms: LobbyRoom[]
 }
 
 const Home: React.SFC<HomeProps> = (props) => {
@@ -21,6 +23,10 @@ const Home: React.SFC<HomeProps> = (props) => {
 		}
 	}
 
+	const rooms = props.rooms.map(room => {
+		return <li key={room.name}>{room.name}</li>
+	})
+
 	return (
 		<div className="App">
 			<header className="App-header">
@@ -31,6 +37,12 @@ const Home: React.SFC<HomeProps> = (props) => {
 			<input type="text" placeholder={props.name && props.name || ''}
 				   onBlur={handleBlurSubmit}
 				   onKeyDown={handleEnterSubmit} />
+			<div>
+				Lobby Rooms:
+				<ul>
+					{rooms}
+				</ul>
+			</div>
 		</div>)
 }
 

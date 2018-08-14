@@ -1,13 +1,8 @@
 import {Reducer} from 'redux'
-import {AuthorizationState, Thunk} from './types'
+import {AsyncAction, AuthorizationState} from './types'
 import {createAction, createStandardAction, getType} from 'typesafe-actions'
 import * as firebase from 'firebase/app'
 import 'firebase/auth'
-
-enum types {
-	NAME_CHANGED = '@@authorization/NAME_CHANGED',
-	LOGGED_IN = '@@authorization/LOGGED_IN',
-}
 
 const initialState: AuthorizationState = {
 	isLoggedIn: false,
@@ -38,7 +33,7 @@ export default (function reducer(state = initialState, action) {
 
 
 // Action creators
-const loggedIn = createAction(types.LOGGED_IN, resolve => {
+const loggedIn = createAction('@@authorization/LOGGED_IN', resolve => {
 	return (user: firebase.User) => {
 		return resolve({
 			displayName: user.displayName,
@@ -49,10 +44,10 @@ const loggedIn = createAction(types.LOGGED_IN, resolve => {
 	}
 })
 
-const nameChanged = createStandardAction(types.NAME_CHANGED)<string>()
+const nameChanged = createStandardAction('@@authorization/NAME_CHANGED')<string>()
 
 // Side effects
-export const updateName: Thunk = (newName: string) => {
+export const updateName = (newName: string): AsyncAction => {
 	return dispatch => {
 		return firebase.auth().currentUser!.updateProfile({
 			displayName: newName,
@@ -63,7 +58,7 @@ export const updateName: Thunk = (newName: string) => {
 	}
 }
 
-export const signInAnonymously: Thunk = () => {
+export const signInAnonymously = (): AsyncAction => {
 	return dispatch => {
 		return firebase.auth().signInAnonymously().then(async (credentials) => {
 			if (credentials.additionalUserInfo && credentials.additionalUserInfo.isNewUser) {

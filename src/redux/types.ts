@@ -19,9 +19,20 @@ export interface AuthorizationState {
 	}
 }
 
-export type Thunk = (payload?: any, ...args: any[]) => ThunkAction<Promise<Action>, State, void, Action>
+// export type Thunk<T = undefined, U = undefined> =
+// 	T extends undefined ?
+// 		() => ThunkAction<Promise<Action>, State, void, Action> :
+// 		U extends undefined ?
+// 			(payload: T) => ThunkAction<Promise<Action>, State, void, Action> :
+// 			(payload: T, history: U) => ThunkAction<Promise<Action>, State, void, Action>
 
 export type ThunkDispatch = TD<State, void, Action>
+
+export type AsyncAction = ThunkAction<Promise<Action>, State, void, Action>
+
+export interface ConnectedReduxProps<S = State> {
+	dispatch: TD<S, void, Action>
+}
 
 export interface LobbyState {
 	readonly rooms: LobbyRoom[]

@@ -1,15 +1,9 @@
 import {Reducer} from 'redux'
-import {LobbyRoom, LobbyState, Thunk} from './types'
+import {AsyncAction, LobbyRoom, LobbyState} from './types'
 import {createAction, createStandardAction, getType} from 'typesafe-actions'
-import * as firebase from 'firebase/app'
-import 'firebase/auth'
+import firebase from '../index'
 import {History} from 'history'
 
-enum types {
-	ROOMS_UPDATED = '@@lobby/ROOMS_UPDATED',
-	ROOM_ADDED = '@@lobby/ROOM_ADDED',
-	JOINED_ROOM = '@@lobby/CREATED_AND_JOINED_ROOM'
-}
 
 const initialState: LobbyState = {
 	rooms: [],
@@ -19,10 +13,6 @@ export default (function reducer(state = initialState, action) {
 	switch (action.type) {
 		case getType(roomsUpdated):
 			return {rooms: action.payload}
-		case getType(roomAdded):
-			return {
-				rooms: state.rooms.concat(action.payload),
-			}
 
 		default:
 			return state
@@ -31,7 +21,7 @@ export default (function reducer(state = initialState, action) {
 
 
 // Action creators
-export const roomsUpdated = createAction(types.ROOMS_UPDATED, resolve => {
+export const roomsUpdated = createAction('@@lobby/ROOMS_UPDATED', resolve => {
 	return (roomsSnapshot: firebase.firestore.QuerySnapshot) => {
 		// Inefficient but fine for now
 		const rooms = [] as LobbyRoom[]
@@ -42,28 +32,23 @@ export const roomsUpdated = createAction(types.ROOMS_UPDATED, resolve => {
 	}
 })
 
-const joinedRoom = createStandardAction(types.JOINED_ROOM)<string>()
-const roomAdded = createStandardAction(types.ROOM_ADDED)<LobbyRoom>()
+const joinedRoom = createStandardAction('@@lobby/CREATED_AND_JOINED_ROOM')<string>()
+// const roomAdded = createStandardAction('@@lobby/ROOM_ADDED')<LobbyRoom>()
 
 // Side effects
-export const createRoom: Thunk = (newRoom: LobbyRoom, history: History) => {
+export const createRoom = (name: string, history: History): AsyncAction => {
 	return dispatch => {
-		return firebase.firestore().collection('room_data').add(newRoom)
-		.then((createdRoom) => {
-			history.push('/' + createdRoom.id)
-			return dispatch(joinedRoom(createdRoom.id))
+		const newRoom = {
+			name,
+		}
+		const newRoomRef = firebase.firestore().collection('room_data').doc()
+		const newRoomId = newRoomRef.id
+		return newRoomRef.set({
+			...newRoom,
+			key: newRoomId,
+		}).then(() => {
+			history.push('/' + newRoomId)
+			return dispatch(joinedRoom(newRoomId))
 		})
 	}
 }
-
-// export const signInAnonymously: Thunk = () => {
-// 	return dispatch => {
-// 		return firebase.auth().signInAnonymously().then(async (credentials) => {
-// 			if (credentials.additionalUserInfo && credentials.additionalUserInfo.isNewUser) {
-// 				await dispatch(updateName('Anonymous' + Math.random()))
-// 				return dispatch(loggedIn(credentials.user!))
-// 			}
-// 			return dispatch(loggedIn(credentials.user!))
-// 		})
-// 	}
-// }

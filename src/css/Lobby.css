@@ -1,0 +1,9 @@
+#rooms-container {
+	/*border: 1px solid white;*/
+	margin:         120px auto auto;
+	max-width:      1128px;
+	position:       relative;
+	display:        flex;
+	flex-direction: column;
+	flex-wrap:      wrap;
+}

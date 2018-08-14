@@ -1,12 +1,13 @@
 import * as firebase from 'firebase/app'
 import 'firebase/auth'
+import 'firebase/firestore'
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import App from './App'
 // import registerServiceWorker from './registerServiceWorker'
 import {Provider} from 'react-redux'
 import configureStore from './redux'
-import {BrowserRouter as Router, Route} from 'react-router-dom'
+import initializeListeners from './firebase'
 
 firebase.initializeApp({
 	apiKey: 'AIzaSyDSm09hcjpWpoWXEDwinj7-tXH6cmt1iCw',
@@ -17,17 +18,17 @@ firebase.initializeApp({
 	messagingSenderId: '63957372247',
 })
 firebase.firestore().settings({timestampsInSnapshots: true})
+export default firebase
+
 
 const store = configureStore()
+initializeListeners(store.dispatch)
 
 ReactDOM.render(
 	<Provider store={store}>
-		<Router>
-			<Route exact path='/' component={App} />
-		</Router>
+		<App />
 	</Provider>,
 	document.getElementById('root') as HTMLElement,
 )
-
 
 // registerServiceWorker()

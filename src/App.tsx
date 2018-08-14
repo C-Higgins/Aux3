@@ -1,47 +1,52 @@
 import * as React from 'react'
-import './App.css'
-import Home from './components/Home'
+import './css/App.css'
+import Lobby from './components/Lobby'
+import Header from './components/Header'
 import {connect} from 'react-redux'
-import {signInAnonymously, updateName} from './redux/authorization'
-import {createRoom, roomsUpdated} from './redux/lobby'
+import {updateName} from './redux/authorization'
+import {createRoom} from './redux/lobby'
 import * as Types from './redux/types'
 import {bindActionCreators} from 'redux'
-import {RouteComponentProps, withRouter} from 'react-router'
-import * as firebase from 'firebase/app'
-import 'firebase/firestore'
+import {BrowserRouter as Router, Route} from 'react-router-dom'
 
 
-const actions = {
-	signInAnonymously,
-	updateName,
-	roomsUpdated,
-	createRoom,
-}
-type Props = typeof actions & Types.AuthorizationState & Types.LobbyState & RouteComponentProps<any>
+class App extends React.Component<MappedStateProps & MappedActionsProps> {
 
-class App extends React.Component<Props> {
 
-	async componentWillMount() {
-		const db = firebase.firestore()
-
-		await this.props.signInAnonymously()
-
-		db.collection('rooms').onSnapshot(ss => {
-			this.props.roomsUpdated(ss)
-		})
-	}
+	// async componentWillMount() {
+	// 	const db = firebase.firestore()
+	//
+	// 	await this.props.dispatch(signInAnonymously())
+	//
+	// 	db.collection('rooms').onSnapshot(ss => {
+	// 		this.props.dispatch(roomsUpdated(ss))
+	// 	})
+	// }
 
 	render() {
+		const home = () => <Lobby rooms={this.props.rooms} createRoom={this.props.createRoom} />
 		return (
-			<Home
-				name={this.props.user && this.props.user.displayName}
-				updateName={this.props.updateName}
-				rooms={this.props.rooms}
-			/>
+			<Router>
+				<div className="wrapper">
+					<Header
+						name={this.props.user && this.props.user.displayName}
+						updateName={this.props.updateName}
+					/>
+					<Route exact path='/' render={home} />
+				</div>
+			</Router>
 		)
 	}
 }
 
+
+const actions = {
+	updateName,
+	createRoom,
+}
+
+type MappedStateProps = Types.AuthorizationState & Types.LobbyState
+type MappedActionsProps = typeof actions
 const mapStateToProps = (state: Types.State) => ({...state.authorization, ...state.lobby})
 const mapDispatchToProps = (dispatch: Types.ThunkDispatch) => bindActionCreators(actions, dispatch)
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App))
+export default connect<MappedStateProps, MappedActionsProps>(mapStateToProps, mapDispatchToProps)(App)

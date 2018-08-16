@@ -12,7 +12,7 @@ interface HomeProps {
 const Lobby: React.SFC<HomeProps & RouteComponentProps<any>> = (props) => {
 	const rooms = props.rooms.map(room => {
 		return (
-			<Link to={'/'} key={room.key}>
+			<Link to={room.id || '/'} key={room.id}>
 				{room.name}
 			</Link>
 		)

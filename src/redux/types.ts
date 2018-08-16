@@ -5,7 +5,7 @@ import {User as FBUser} from 'firebase'
 export interface State {
 	readonly authorization: AuthorizationState
 	readonly lobby: LobbyState
-	// readonly room: RoomState
+	readonly room: RoomState
 	// readonly user: UserState
 }
 
@@ -46,10 +46,10 @@ export interface LobbyRoom {
 	readonly userCount: number
 	readonly name: string
 	readonly currentTrack: Track
-	readonly key: string
+	readonly id: string
 }
 
-interface RoomState extends LobbyRoom {
+export interface RoomState extends LobbyRoom {
 	readonly hostId: string
 	readonly users: PublicUser[]
 	readonly tracks: { [key: string]: Track }

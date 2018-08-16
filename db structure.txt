@@ -3,14 +3,14 @@
 		current_track {}
 		userCount
 		name
-		key
+		id
 *RoomData (inside room)
 	ROOMID
 		current_track {}
 		userCount
 		name
 		hostID
-		key
+		id
 		*Users
 			USERID
 				...Users.USERID.public

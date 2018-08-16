@@ -8,6 +8,7 @@ import {createRoom} from './redux/lobby'
 import * as Types from './redux/types'
 import {bindActionCreators} from 'redux'
 import {BrowserRouter as Router, Route} from 'react-router-dom'
+import RoomWrapper from './wrappers/RoomWrapper'
 
 
 class App extends React.Component<MappedStateProps & MappedActionsProps> {
@@ -33,6 +34,7 @@ class App extends React.Component<MappedStateProps & MappedActionsProps> {
 						updateName={this.props.updateName}
 					/>
 					<Route exact path='/' render={home} />
+					<Route path="/:id" component={RoomWrapper} />
 				</div>
 			</Router>
 		)

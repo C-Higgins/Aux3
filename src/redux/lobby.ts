@@ -45,7 +45,7 @@ export const createRoom = (name: string, history: History): AsyncAction => {
 		const newRoomId = newRoomRef.id
 		return newRoomRef.set({
 			...newRoom,
-			key: newRoomId,
+			id: newRoomId,
 		}).then(() => {
 			history.push('/' + newRoomId)
 			return dispatch(joinedRoom(newRoomId))

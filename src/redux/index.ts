@@ -1,6 +1,7 @@
 import {applyMiddleware, combineReducers, createStore, Store} from 'redux'
 import authReducer from './authorization'
 import lobbyReducer from './lobby'
+import roomReducer from './room'
 import {createLogger} from 'redux-logger'
 import thunk from 'redux-thunk'
 import {composeWithDevTools} from 'redux-devtools-extension'
@@ -11,6 +12,7 @@ const loggerMiddleware = createLogger()
 const rootReducer = combineReducers<State>({
 	authorization: authReducer,
 	lobby: lobbyReducer,
+	room: roomReducer,
 })
 
 export default function configureStore(initialState?: State): Store<State> {

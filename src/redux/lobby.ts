@@ -46,6 +46,7 @@ export const createRoom = (name: string, history: History): AsyncAction => {
 		return newRoomRef.set({
 			...newRoom,
 			id: newRoomId,
+			createdAt: firebase.firestore.FieldValue.serverTimestamp(),
 		}).then(() => {
 			history.push('/' + newRoomId)
 			return dispatch(joinedRoom(newRoomId))

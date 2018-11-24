@@ -24,7 +24,7 @@ export default (function reducer(state = initialState, action) {
 export const roomsUpdated = createAction('@@lobby/ROOMS_UPDATED', resolve => {
 	return (roomsSnapshot: firebase.firestore.QuerySnapshot) => {
 		// Inefficient but fine for now
-		const rooms = [] as LobbyRoom[]
+		const rooms: LobbyRoom[] = []
 		roomsSnapshot.forEach(doc => {
 			rooms.push(doc.data() as LobbyRoom)
 		})

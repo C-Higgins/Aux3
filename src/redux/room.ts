@@ -1,11 +1,12 @@
 import {Reducer} from 'redux'
-import {AsyncAction, LobbyRoom, RoomState} from './types'
-import {createAction, createStandardAction, getType} from 'typesafe-actions'
-import firebase from '../index'
-import {History} from 'history'
+import {Message, RoomState} from './types'
+import {createStandardAction, getType} from 'typesafe-actions'
 
 
-const initialState: RoomState = {} as RoomState
+const initialState: RoomState = {
+	messages: [] as Message[],
+	users: [] as any,
+} as RoomState
 
 export default (function reducer(state = initialState, action) {
 	switch (action.type) {
@@ -13,6 +14,14 @@ export default (function reducer(state = initialState, action) {
 			return {
 				...state,
 				...action.payload,
+			}
+
+		case getType(messageReceived):
+			const msg: Message = action.payload
+			msg.timestamp = msg.timestamp || Date.now().toString()
+			return {
+				...state,
+				messages: state.messages.concat(msg),
 			}
 
 		default:
@@ -23,3 +32,4 @@ export default (function reducer(state = initialState, action) {
 
 // Action creators
 export const roomUpdated = createStandardAction('@@room/ROOM_UPDATED')<RoomState>()
+export const messageReceived = createStandardAction('@@room/MESSAGE_RECIEVED')<Message>()

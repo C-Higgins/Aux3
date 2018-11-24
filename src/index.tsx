@@ -8,6 +8,7 @@ import App from './App'
 import {Provider} from 'react-redux'
 import configureStore from './redux'
 import initializeListeners from './firebase'
+import {IconContext} from 'react-icons/lib'
 
 firebase.initializeApp({
 	apiKey: 'AIzaSyDSm09hcjpWpoWXEDwinj7-tXH6cmt1iCw',
@@ -20,15 +21,26 @@ firebase.initializeApp({
 firebase.firestore().settings({timestampsInSnapshots: true})
 export default firebase
 
-
+// Set up the store with all the middleware
 const store = configureStore()
+// Initial firebase listener setup. Pass the dispatch so it can update the state from listeners
 initializeListeners(store.dispatch)
 
+// react-icon default config
+const iconConfig = {
+	className: 'react-icons',
+}
+
+// TODO: Don't load app until listeners are done initializing
 ReactDOM.render(
 	<Provider store={store}>
-		<App />
+		<IconContext.Provider value={iconConfig}>
+			<App />
+		</IconContext.Provider>
 	</Provider>,
 	document.getElementById('root') as HTMLElement,
 )
+
+export {store}
 
 // registerServiceWorker()

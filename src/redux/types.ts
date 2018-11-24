@@ -1,6 +1,5 @@
 import {ThunkAction, ThunkDispatch as TD} from 'redux-thunk'
 import {Action} from 'redux'
-import {User as FBUser} from 'firebase'
 
 export interface State {
 	readonly authorization: AuthorizationState
@@ -38,9 +37,9 @@ export interface LobbyState {
 	readonly rooms: LobbyRoom[]
 }
 
-interface UserState extends FBUser {
-	readonly settings: { readonly [key: string]: any }
-}
+// interface UserState extends FBUser {
+// 	readonly settings: { readonly [key: string]: any }
+// }
 
 export interface LobbyRoom {
 	readonly userCount: number
@@ -53,6 +52,7 @@ export interface RoomState extends LobbyRoom {
 	readonly hostId: string
 	readonly users: PublicUser[]
 	readonly tracks: { [key: string]: Track }
+	readonly messages: Message[]
 }
 
 interface PublicUser {
@@ -68,3 +68,9 @@ interface Track {
 	readonly isUploading: boolean
 }
 
+export interface Message {
+	author: string
+	timestamp: string
+	text: string
+	system?: boolean
+}

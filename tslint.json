@@ -6,6 +6,7 @@
       "node_modules/**/*.ts"
     ]
   },
+  "defaultSeverity": "error",
   "rules": {
     "object-literal-sort-keys": false,
     "no-console": {

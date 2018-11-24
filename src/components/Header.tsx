@@ -1,6 +1,7 @@
 import * as React from 'react'
 import {Link} from 'react-router-dom'
 import '../css/Header.css'
+import {MdAddCircleOutline, MdSettings} from 'react-icons/md'
 
 interface HeaderProps {
 	name: string | null
@@ -11,6 +12,7 @@ const Home: React.SFC<HeaderProps> = (props) => {
 	function handleEnterSubmit(kbEvent: React.KeyboardEvent<HTMLInputElement>) {
 		kbEvent.persist()
 		if (kbEvent.keyCode === 13) {
+			// Triggers the onblur method to do the actual submit
 			kbEvent.currentTarget.blur()
 		}
 	}
@@ -32,12 +34,8 @@ const Home: React.SFC<HeaderProps> = (props) => {
 				   onBlur={handleBlurSubmit}
 				   onKeyDown={handleEnterSubmit} />
 			<div id="buttons">
-				<i className="material-icons lobby-button">
-					add_circle_outline
-				</i>
-				<i className="material-icons lobby-button">
-					settings
-				</i>
+				<MdAddCircleOutline className="lobby-button" />
+				<MdSettings className="lobby-button" />
 			</div>
 		</div>
 	</div>

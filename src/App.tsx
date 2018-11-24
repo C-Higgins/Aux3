@@ -51,4 +51,5 @@ type MappedStateProps = Types.AuthorizationState & Types.LobbyState
 type MappedActionsProps = typeof actions
 const mapStateToProps = (state: Types.State) => ({...state.authorization, ...state.lobby})
 const mapDispatchToProps = (dispatch: Types.ThunkDispatch) => bindActionCreators(actions, dispatch)
-export default connect<MappedStateProps, MappedActionsProps>(mapStateToProps, mapDispatchToProps)(App)
+const connectedApp = connect<MappedStateProps, MappedActionsProps>(mapStateToProps, mapDispatchToProps)(App)
+export default connectedApp

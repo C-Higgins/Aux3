@@ -27,7 +27,7 @@ const Lobby: React.SFC<HomeProps & RouteComponentProps<any>> = (props) => {
 
 	return (
 		<div id="rooms-container">
-			<input type="text" onKeyDown={handleEnterSubmit} />
+			<input type="text" onKeyDown={handleEnterSubmit} placeholder='Create room...' />
 			{rooms}
 		</div>
 	)

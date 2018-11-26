@@ -53,6 +53,8 @@ export interface RoomState extends LobbyRoom {
 	readonly users: PublicUser[]
 	readonly tracks: { [key: string]: Track }
 	readonly messages: Message[]
+	readonly isLoadingRoom: boolean
+	readonly isLoadingChat: boolean
 }
 
 interface PublicUser {

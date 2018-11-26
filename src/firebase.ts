@@ -1,7 +1,9 @@
 import {default as firebase} from './index'
 import {signInAnonymously} from './redux/authorization'
 import {roomsUpdated} from './redux/lobby'
-import {Message, RoomState, ThunkDispatch} from './redux/types'
+import {ThunkDispatch} from './redux/types'
+import QuerySnapshot = firebase.firestore.QuerySnapshot
+import DocumentSnapshot = firebase.firestore.DocumentSnapshot
 
 export default function initializeListeners(dispatch: ThunkDispatch) {
 	const db = firebase.firestore()
@@ -22,8 +24,8 @@ export const FS = {
 	},
 
 	subscribeToRoom(roomId: string,
-					onRoomUpdate: (room: RoomState | undefined) => any,
-					onChatUpdate: (msg: Message) => any) {
+					onRoomSnapshot: (ss: DocumentSnapshot) => any,
+					onChatSnapshot: (ss: QuerySnapshot) => any) {
 		if (roomListenerMap.get('ROOM_' + roomId)) {
 			this.unsubscribeFromRoom(roomId)
 		}
@@ -31,25 +33,22 @@ export const FS = {
 		const roomDoc = this.db.collection('room_data').doc(roomId)
 
 		// onSnapshot returns a function that cancels the listener
-		const unsubscribeFromRoomListener = roomDoc.onSnapshot(roomSnapshot => {
-			onRoomUpdate(roomSnapshot.data() as RoomState)
-		})
+		const unsubscribeFromRoomListener = roomDoc.onSnapshot(onRoomSnapshot)
 
 		const unsubscribeFromChatListener = roomDoc.collection('messages').orderBy('timestamp')
-		.onSnapshot(messagesSnapshot => {
-			messagesSnapshot.docChanges().forEach(change => {
-				if (change.type === 'added') {
-					onChatUpdate(change.doc.data() as Message)
-				}
-			})
-		})
+		.onSnapshot(onChatSnapshot)
 		roomListenerMap.set('ROOM_' + roomId, [unsubscribeFromRoomListener, unsubscribeFromChatListener])
+		console.info('Subscribed to ' + roomId)
 	},
-	unsubscribeFromRoom(id: string) {
-		const unsubscribeFunctions = roomListenerMap.get('ROOM_' + id)
+	unsubscribeFromRoom(roomId: string, cb?: (roomId: string) => any) {
+		const unsubscribeFunctions = roomListenerMap.get('ROOM_' + roomId)
 		if (unsubscribeFunctions) {
 			unsubscribeFunctions.forEach(f => f())
 		}
-		roomListenerMap.delete('ROOM_' + id)
+		roomListenerMap.delete('ROOM_' + roomId)
+		console.info('Unsubscribed from ' + roomId)
+		if (cb) {
+			cb(roomId)
+		}
 	},
 }

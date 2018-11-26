@@ -9,6 +9,7 @@ interface ChatProps {
 	users: RoomState['users']
 	showUsers: boolean
 	sendChat: (message: string) => any
+	isLoading: boolean,
 }
 
 class Chat extends React.PureComponent<ChatProps> {
@@ -17,7 +18,7 @@ class Chat extends React.PureComponent<ChatProps> {
 	textArea = null as HTMLTextAreaElement | null
 
 	componentDidUpdate(prevProps: ChatProps) {
-		if (this.props.messages.length !== prevProps.messages.length && this.messagesDiv) {
+		if (this.messagesDiv) {
 			this.messagesDiv.scrollTop = this.messagesDiv.scrollHeight
 		}
 	}
@@ -60,7 +61,7 @@ class Chat extends React.PureComponent<ChatProps> {
 				<div id="chat-messages" ref={div => {
 					this.messagesDiv = div
 				}}>
-					{messages}
+					{this.props.isLoading ? 'Loading...' : messages}
 				</div>
 			</div>
 			<textarea

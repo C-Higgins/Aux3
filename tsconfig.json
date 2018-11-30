@@ -10,6 +10,16 @@
     "jsx": "react",
     "moduleResolution": "node",
     "rootDir": "src",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ],
+      "types": [
+        "src/types"
+      ]
+    },
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,

@@ -1,6 +1,6 @@
-import * as React from 'react'
+import React, {PureComponent} from 'react'
 import '../css/Chat.css'
-import {RoomState} from '../redux/types'
+import {RoomState} from 'types'
 import classes from 'classnames'
 import {MdArrowDropDown, MdArrowDropUp, MdGroup} from 'react-icons/md'
 
@@ -12,7 +12,7 @@ interface ChatProps {
 	isLoading: boolean,
 }
 
-class Chat extends React.PureComponent<ChatProps> {
+class Chat extends PureComponent<ChatProps> {
 
 	messagesDiv = null as HTMLDivElement | null
 	textArea = null as HTMLTextAreaElement | null

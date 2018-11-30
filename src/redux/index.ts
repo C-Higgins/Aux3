@@ -1,23 +1,26 @@
-import {applyMiddleware, combineReducers, createStore, Store} from 'redux'
+import {applyMiddleware, combineReducers, createStore} from 'redux'
 import authReducer from './authorization'
 import lobbyReducer from './lobby'
 import roomReducer from './room'
 import {createLogger} from 'redux-logger'
 import thunk from 'redux-thunk'
 import {composeWithDevTools} from 'redux-devtools-extension'
-import {State} from './types'
+import {RootState} from 'types'
 
 const loggerMiddleware = createLogger()
 
-const rootReducer = combineReducers<State>({
+const rootReducer = combineReducers({
 	authorization: authReducer,
 	lobby: lobbyReducer,
 	room: roomReducer,
 })
 
-export default function configureStore(initialState?: State): Store<State> {
-	if (initialState) {
-		return createStore(rootReducer, initialState, composeWithDevTools(applyMiddleware(loggerMiddleware, thunk)))
-	}
-	return createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk, loggerMiddleware)))
+export {rootReducer}
+
+function configureStore(initialState?: RootState) {
+	return createStore(rootReducer, initialState!, composeWithDevTools(applyMiddleware(thunk, loggerMiddleware)))
 }
+
+// can pass an optional param to rehydrate state on app start
+const store = configureStore()
+export default store

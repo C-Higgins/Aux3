@@ -6,7 +6,7 @@ import * as ReactDOM from 'react-dom'
 import App from './App'
 // import registerServiceWorker from './registerServiceWorker'
 import {Provider} from 'react-redux'
-import configureStore from './redux'
+import store from './redux'
 import initializeListeners from './firebase'
 import {IconContext} from 'react-icons/lib'
 
@@ -21,8 +21,6 @@ firebase.initializeApp({
 firebase.firestore().settings({timestampsInSnapshots: true})
 export default firebase
 
-// Set up the store with all the middleware
-const store = configureStore()
 // Initial firebase listener setup. Pass the dispatch so it can update the state from listeners
 initializeListeners(store.dispatch)
 

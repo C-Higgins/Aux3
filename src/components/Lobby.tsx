@@ -1,5 +1,5 @@
-import * as React from 'react'
-import {LobbyRoom} from '../redux/types'
+import React, {FunctionComponent} from 'react'
+import {LobbyRoom} from 'types'
 import {Link, RouteComponentProps, withRouter} from 'react-router-dom'
 import '../css/Lobby.css'
 import {History} from 'history'
@@ -9,7 +9,7 @@ interface HomeProps {
 	createRoom: (name: string, history: History) => any
 }
 
-const Lobby: React.SFC<HomeProps & RouteComponentProps<any>> = (props) => {
+const Lobby: FunctionComponent<HomeProps & RouteComponentProps<any>> = (props) => {
 	const rooms = props.rooms.map(room => {
 		return (
 			<Link to={room.id || '/'} key={room.id}>

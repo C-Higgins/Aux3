@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, {FunctionComponent} from 'react'
 import ChatWrapper from '../wrappers/ChatWrapper'
 
 interface RoomProps {
@@ -7,7 +7,7 @@ interface RoomProps {
 	isLoading: boolean
 }
 
-const Home: React.SFC<RoomProps> = (props) => {
+const Home: FunctionComponent<RoomProps> = (props) => {
 	const loading = 'LOADING...'
 	const notLoading = `you are in room ${props.id} (${props.name})`
 

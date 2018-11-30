@@ -1,6 +1,6 @@
 import {Reducer} from 'redux'
-import {AsyncAction, AuthorizationState} from './types'
-import {createAction, createStandardAction, getType} from 'typesafe-actions'
+import {AuthorizationState, ThunkActionAux} from 'types'
+import {ActionType, createAction, createStandardAction, getType} from 'typesafe-actions'
 import * as firebase from 'firebase/app'
 import 'firebase/auth'
 
@@ -9,7 +9,7 @@ const initialState: AuthorizationState = {
 	user: null,
 }
 
-export default (function reducer(state = initialState, action) {
+export default ((state = initialState, action) => {
 	switch (action.type) {
 		case getType(loggedIn):
 			return {
@@ -21,7 +21,7 @@ export default (function reducer(state = initialState, action) {
 			return {
 				...state,
 				user: {
-					...state.user,
+					...state.user!,
 					displayName: action.payload,
 				},
 			}
@@ -29,8 +29,7 @@ export default (function reducer(state = initialState, action) {
 		default:
 			return state
 	}
-}) as Reducer<AuthorizationState>
-
+}) as Reducer<AuthorizationState, AuthorizationAction>
 
 // Action creators
 const loggedIn = createAction('@@authorization/LOGGED_IN', resolve => {
@@ -47,25 +46,32 @@ const loggedIn = createAction('@@authorization/LOGGED_IN', resolve => {
 const nameChanged = createStandardAction('@@authorization/NAME_CHANGED')<string>()
 
 // Side effects
-export const updateName = (newName: string): AsyncAction => {
+export const updateName = (newName: string): ThunkActionAux<Promise<void>> => {
 	return dispatch => {
 		return firebase.auth().currentUser!.updateProfile({
 			displayName: newName,
 			photoURL: null,
 		}).then(() => {
-			return dispatch(nameChanged(newName))
+			dispatch(nameChanged(newName))
 		})
 	}
 }
 
-export const signInAnonymously = (): AsyncAction => {
+export const signInAnonymously = (): ThunkActionAux<Promise<void>> => {
 	return dispatch => {
 		return firebase.auth().signInAnonymously().then(async (credentials) => {
 			if (credentials.additionalUserInfo && credentials.additionalUserInfo.isNewUser) {
 				await dispatch(updateName('Anonymous' + Math.random()))
-				return dispatch(loggedIn(credentials.user!))
+				dispatch(loggedIn(credentials.user!))
 			}
-			return dispatch(loggedIn(credentials.user!))
+			dispatch(loggedIn(credentials.user!))
 		})
 	}
 }
+
+const authActions = {
+	loggedIn,
+	nameChanged,
+}
+
+export type AuthorizationAction = ActionType<typeof authActions>

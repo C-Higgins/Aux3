@@ -1,6 +1,6 @@
 import {Reducer} from 'redux'
-import {Message, RoomState} from './types'
-import {createStandardAction, getType} from 'typesafe-actions'
+import {Message, RoomState} from 'types'
+import {ActionType, createStandardAction, getType} from 'typesafe-actions'
 
 
 const initialState: RoomState = {
@@ -48,7 +48,7 @@ export default (function reducer(state = initialState, action) {
 		default:
 			return state
 	}
-}) as Reducer<RoomState>
+}) as Reducer<RoomState, RoomAction>
 
 
 // Action creators
@@ -67,3 +67,12 @@ export const roomLeft = createStandardAction('@@room/ROOM_LEFT')<string>()
 
 // Messages have been loaded, even if there are none
 export const messagesLoaded = createStandardAction('@@room/MESSAGES_LOADED')<void>()
+
+const roomActions = {
+	roomUpdated,
+	messageReceived,
+	roomJoined,
+	roomLeft,
+	messagesLoaded,
+}
+export type RoomAction = ActionType<typeof roomActions>

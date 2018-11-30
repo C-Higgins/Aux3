@@ -1,15 +1,14 @@
 import {Reducer} from 'redux'
-import {AsyncAction, LobbyRoom, LobbyState} from './types'
-import {createAction, createStandardAction, getType} from 'typesafe-actions'
-import firebase from '../index'
+import {LobbyRoom, LobbyState, ThunkActionAux} from 'types'
+import {ActionType, createAction, createStandardAction, getType} from 'typesafe-actions'
+import firebase from '@/index'
 import {History} from 'history'
-
 
 const initialState: LobbyState = {
 	rooms: [],
 }
 
-export default (function reducer(state = initialState, action) {
+export default ((state = initialState, action) => {
 	switch (action.type) {
 		case getType(roomsUpdated):
 			return {rooms: action.payload}
@@ -17,7 +16,7 @@ export default (function reducer(state = initialState, action) {
 		default:
 			return state
 	}
-}) as Reducer<LobbyState>
+}) as Reducer<LobbyState, LobbyAction>
 
 
 // Action creators
@@ -36,7 +35,7 @@ const joinedRoom = createStandardAction('@@lobby/CREATED_AND_JOINED_ROOM')<strin
 // const roomAdded = createStandardAction('@@lobby/ROOM_ADDED')<LobbyRoom>()
 
 // Side effects
-export const createRoom = (name: string, history: History): AsyncAction => {
+export const createRoom = (name: string, history: History): ThunkActionAux<Promise<void>> => {
 	return dispatch => {
 		const newRoom = {
 			name,
@@ -49,7 +48,14 @@ export const createRoom = (name: string, history: History): AsyncAction => {
 			createdAt: firebase.firestore.FieldValue.serverTimestamp(),
 		}).then(() => {
 			history.push('/' + newRoomId)
-			return dispatch(joinedRoom(newRoomId))
+			dispatch(joinedRoom(newRoomId))
 		})
 	}
 }
+
+const actionCreators = {
+	roomsUpdated,
+	joinedRoom,
+}
+
+export type LobbyAction = ActionType<typeof actionCreators>

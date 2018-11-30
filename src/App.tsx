@@ -5,13 +5,23 @@ import Header from './components/Header'
 import {connect} from 'react-redux'
 import {updateName} from './redux/authorization'
 import {createRoom} from './redux/lobby'
-import * as Types from './redux/types'
-import {bindActionCreators} from 'redux'
 import {BrowserRouter as Router, Route} from 'react-router-dom'
 import RoomWrapper from './wrappers/RoomWrapper'
+import {bindActionCreators} from 'redux'
+import {DispatchAux, RootState} from 'types'
 
+const actions = {
+	updateName,
+	createRoom,
+}
 
-class App extends React.Component<MappedStateProps & MappedActionsProps> {
+// Transform the redux store into props consumed by wrapper component
+const mapStateToProps = (state: RootState) => ({
+	rooms: state.lobby.rooms,
+	user: state.authorization.user,
+})
+
+class App extends React.Component<Props> {
 
 
 	// async componentWillMount() {
@@ -41,15 +51,9 @@ class App extends React.Component<MappedStateProps & MappedActionsProps> {
 	}
 }
 
-
-const actions = {
-	updateName,
-	createRoom,
-}
-
-type MappedStateProps = Types.AuthorizationState & Types.LobbyState
-type MappedActionsProps = typeof actions
-const mapStateToProps = (state: Types.State) => ({...state.authorization, ...state.lobby})
-const mapDispatchToProps = (dispatch: Types.ThunkDispatch) => bindActionCreators(actions, dispatch)
-const connectedApp = connect<MappedStateProps, MappedActionsProps>(mapStateToProps, mapDispatchToProps)(App)
+// When using thunks, can't use the shorthand of passing actions directly to connect
+const mapDispatchToProps = (dispatch: DispatchAux) => bindActionCreators(actions, dispatch)
+// Can't use "typeof actions" when using thunks
+type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>
+const connectedApp = connect(mapStateToProps, mapDispatchToProps)(App)
 export default connectedApp

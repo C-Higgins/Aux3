@@ -1,10 +1,9 @@
-import * as Types from '../redux/types'
-import {Message, RoomState} from '../redux/types'
-import {messageReceived, messagesLoaded, roomJoined, roomLeft, roomUpdated} from '../redux/room'
+import {Message, RoomState, RootState} from 'types'
+import {messageReceived, messagesLoaded, roomJoined, roomLeft, roomUpdated} from '@/redux/room'
 import {connect} from 'react-redux'
-import * as React from 'react'
+import React, {Component} from 'react'
 import {RouteComponentProps} from 'react-router'
-import {FS} from '../firebase'
+import {FS} from '@/firebase'
 import Room from '../components/Room'
 
 const actions = {
@@ -15,16 +14,16 @@ const actions = {
 	messagesLoaded,
 }
 
-interface MappedStateProps {
-	room: Types.RoomState,
-	user: Types.AuthorizationState['user']
-}
+const mapStateToProps = (state: RootState) => ({
+	room: state.room,
+})
 
-class RoomWrapper extends React.Component<MappedStateProps & typeof actions & RouteComponentProps<any>> {
+class RoomWrapper extends Component<Props> {
 
 	id = this.props.match.params.id
 
 	componentDidMount() {
+
 		this.props.roomJoined(this.id)
 		FS.subscribeToRoom(this.id,
 			roomSnapshot => {
@@ -60,17 +59,21 @@ class RoomWrapper extends React.Component<MappedStateProps & typeof actions & Ro
 	}
 }
 
-const mapStateToProps = (state: Types.State) => ({
-	room: state.room,
-	user: state.authorization.user,
-})
-const cnRoomWrapper = connect<MappedStateProps, typeof actions>(mapStateToProps, actions)(RoomWrapper)
+// TODO: How to validate that action creators passed to connect are valid?
+// https://github.com/piotrwitek/react-redux-typescript-guide/issues/110
+type Props = ReturnType<typeof mapStateToProps> & typeof actions & RouteComponentProps<any>
+const cnRoomWrapper = connect(mapStateToProps, actions)(RoomWrapper)
 export default cnRoomWrapper
 
 
 /*
 * connect(mapStateToProps, actions) is the same as
-* connect(mapStateToProps, (dispatch: Types.ThunkDispatch) => bindActionCreators(actions, dispatch))
+* connect(mapStateToProps, (dispatch: Types.DispatchAux) => bindActionCreators(actions, dispatch))
 *
 * it automatically uses the bindActionCreators when you pass an object of action creators
+*
+* mapStateToProps takes an optional second param, ownProps, which is the props passed to the component by other means
+* (such as from a parent). Then mSTP is called on prop changes as well. Lets you define props which depend at once on
+* external props and the store.
+* More: https://github.com/reduxjs/react-redux/blob/master/docs/api.md#connect
 * */

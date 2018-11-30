@@ -1,14 +1,14 @@
-import * as React from 'react'
+import React, {FunctionComponent} from 'react'
 import {Link} from 'react-router-dom'
 import '../css/Header.css'
 import {MdAddCircleOutline, MdSettings} from 'react-icons/md'
 
 interface HeaderProps {
 	name: string | null
-	updateName: (newName: string) => any
+	updateName: (newName: string) => void
 }
 
-const Home: React.SFC<HeaderProps> = (props) => {
+const Home: FunctionComponent<HeaderProps> = (props) => {
 	function handleEnterSubmit(kbEvent: React.KeyboardEvent<HTMLInputElement>) {
 		kbEvent.persist()
 		if (kbEvent.keyCode === 13) {

@@ -1,11 +1,11 @@
 import {default as firebase} from './index'
 import {signInAnonymously} from './redux/authorization'
 import {roomsUpdated} from './redux/lobby'
-import {ThunkDispatch} from './redux/types'
+import {DispatchAux} from 'types'
 import QuerySnapshot = firebase.firestore.QuerySnapshot
 import DocumentSnapshot = firebase.firestore.DocumentSnapshot
 
-export default function initializeListeners(dispatch: ThunkDispatch) {
+export default function initializeListeners(dispatch: DispatchAux) {
 	const db = firebase.firestore()
 	db.collection('rooms').onSnapshot(ss => {
 		dispatch(roomsUpdated(ss))

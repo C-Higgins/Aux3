@@ -79,5 +79,5 @@ export interface Message {
  *
  * @template T ThunkAction to be wrapped
  */
-export type ThunkActionDispatch<T extends RThunkAction<any, any, any, any>> = (...args: Parameters<T>)
-	=> ReturnType<ReturnType<T>>;
+export type ThunkActionDispatch<T extends (...args: any[]) => RThunkAction<any, any, any, any>> =
+	(...args: Parameters<T>) => ReturnType<ReturnType<T>>

@@ -13,9 +13,21 @@ export type RootAction =
 // Figure out the type of state from the root reducer, to reduce duplication
 export type RootState = Readonly<StateType<typeof rootReducer>>
 
-// The
+// The Dispatch and ThunkAction types with validation for state and actions
 export type DispatchAux = RThunkDispatch<RootState, any, RootAction>
 export type ThunkActionAux<R = any> = RThunkAction<R, RootState, any, RootAction>
+
+type ActionCreator = (...args: any[]) => RThunkAction<any, RootState, any, RootAction>
+
+// // The type of the actions object in components
+// export interface Actions {
+// 	[key: string]: ActionCreator
+// }
+//
+// // The return type of bindActionCreators, given T as actions
+// export type BoundActions<T extends Actions> = {
+// 	[P in keyof T]: ThunkActionDispatch<T[P]>
+// }
 
 export interface AuthorizationState {
 	readonly isLoggedIn: boolean
@@ -75,9 +87,9 @@ export interface Message {
 
 /**
  * Takes a ThunkAction and returns a function signature which matches how it would appear when processed using
- * bindActionCreators
+ * bindActionCreators. This is what bindActionCreators will return for each function
  *
  * @template T ThunkAction to be wrapped
  */
-export type ThunkActionDispatch<T extends (...args: any[]) => RThunkAction<any, any, any, any>> =
+export type ThunkActionDispatch<T extends ActionCreator> =
 	(...args: Parameters<T>) => ReturnType<ReturnType<T>>

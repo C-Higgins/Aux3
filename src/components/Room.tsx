@@ -14,6 +14,7 @@ const Home: FunctionComponent<RoomProps> = (props) => {
 	return <div id="room-container">
 		{props.isLoading ? loading : notLoading}
 		<ChatWrapper />
+		<input type="file" />
 	</div>
 }
 export default Home

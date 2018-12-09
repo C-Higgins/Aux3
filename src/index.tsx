@@ -21,13 +21,14 @@ firebase.initializeApp({
 firebase.firestore().settings({timestampsInSnapshots: true})
 export default firebase
 
-// Initial firebase listener setup. Pass the dispatch so it can update the state from listeners
-initializeListeners(store.dispatch)
 
 // react-icon default config
 const iconConfig = {
 	className: 'react-icons',
 }
+
+// Initial firebase listener setup. Pass the dispatch so it can update the state from listeners
+initializeListeners(store.dispatch)
 
 // TODO: Don't load app until listeners are done initializing
 ReactDOM.render(

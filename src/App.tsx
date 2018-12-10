@@ -35,7 +35,11 @@ class App extends React.Component<Props> {
 	// }
 
 	render() {
-		const home = () => <Lobby rooms={this.props.rooms} createRoom={this.props.createRoom} />
+		const Home = () => <Lobby rooms={this.props.rooms} createRoom={this.props.createRoom} />
+		const Loading = () => <div>LOADING AUX</div>
+		if (!this.props.user) {
+			return Loading
+		}
 		return (
 			<Router>
 				<div className="wrapper">
@@ -43,7 +47,7 @@ class App extends React.Component<Props> {
 						name={this.props.user && this.props.user.displayName}
 						updateName={this.props.updateName}
 					/>
-					<Route exact path='/' render={home} />
+					<Route exact path='/' render={Home} />
 					<Route path="/:id" component={RoomWrapper} />
 				</div>
 			</Router>

@@ -11,7 +11,6 @@ export default function initializeListeners(dispatch: DispatchAux) {
 		dispatch(roomsUpdated(ss))
 	})
 	dispatch(signInAnonymously())
-
 }
 
 // A map of the rooms keys to the functions to stop listening to them.
@@ -51,4 +50,5 @@ export const FS = {
 			cb(roomId)
 		}
 	},
+
 }

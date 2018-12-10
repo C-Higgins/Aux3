@@ -4,6 +4,7 @@ import {AuthorizationAction} from './redux/authorization'
 import {RoomAction} from './redux/room'
 import {StateType} from 'typesafe-actions'
 import {rootReducer} from './redux'
+import {IAudioMetadata} from 'music-metadata-browser'
 
 export type RootAction =
 	| LobbyAction
@@ -81,3 +82,10 @@ export interface Message {
  */
 export type ThunkActionDispatch<T extends RThunkAction<any, any, any, any>> = (...args: Parameters<T>)
 	=> ReturnType<ReturnType<T>>;
+
+
+export interface Metadata extends IAudioMetadata {
+	key: string | null,
+	pending: boolean,
+	name: string
+}

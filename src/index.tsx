@@ -1,6 +1,7 @@
 import * as firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
+import 'firebase/storage'
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import App from './App'
